@@ -35,9 +35,9 @@
                         <label for="password_signin" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password_signin">
                     </div>
+                    <span id="result_signin" style="margin-top:50px; margin-bottom:50px;"></span><br>
                     <button class="btn btn-primary" type="button">Sign in</button>
                     <button class="btn btn-primary" type="button" onclick="show_signup()">Sign Up</button>
-                    <span id="result_signin" style="margin-top:50px"></span>
                 </form>
 
                 <form id="form_signup">
@@ -53,9 +53,10 @@
                         <label for="password_check" class="form-label">Password Check</label>
                         <input type="password" class="form-control" id="password_check">
                     </div>
+                    <span id="result_signup" style="margin-top:50px; margin-bottom:50px;"></span><br>
                     <button id="button_signin" type="button" class="btn btn-primary" onclick="show_signin()">Sign in</button>
                     <button id="button_signup" type="button" class="btn btn-primary" onclick="register()">Sign Up</button>
-                    <span id="result_signup" style="margin-top:50px"></span>
+                    <button id="kakao_login" type="button" class="btn btn-primary" onclick="kakao()">Kakao</button>
                 </form>
             </main>
 
@@ -95,8 +96,18 @@
                 const password_check = document.getElementById("password_check").value
                 const result_signup = document.getElementById("result_signup")
 
-                if (id == "" | password == "" | password_check == "") {
+                if (id == "") {
                     console.log('error');
+                    document.getElementById("id_signup").classList.add('is-invalid')
+                    document.getElementById("result_signup").textContent = "Input ID"
+                } else if (password == "") {
+                    console.log('error');
+                    document.getElementById("password_signup").classList.add('is-invalid')
+                    document.getElementById("result_signup").textContent = "Input password"
+                } else if (password_check == "") {
+                    console.log('error');
+                    document.getElementById("password_check").classList.add('is-invalid')
+                    document.getElementById("result_signup").textContent = "Input password twice"
                 } else if (password === password_check) {
                     const response = await fetch('/signup', {
                         method:'POST',
@@ -107,9 +118,19 @@
                     document.getElementById("id_signup").textContent = "";
                     document.getElementById("password_signup").textContent = "";
                     document.getElementById("password_check").textContent = "";
+                    document.getElementById("result_signup").textContent = "";
+                    alert("Signed up successfully")
                     show_signin();
                 }
             }
+
+            function kakao() {
+                console.log(Kakao.isInitialized());
+                Kakao.Auth.authorize()
+            }
         </script>
+        <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js"
+            integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH" crossorigin="anonymous"></script>
+        <script>Kakao.init('${15ea86f143832ac594738ff197575483}');</script>
     </body>
 </html>
